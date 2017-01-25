@@ -1,0 +1,127 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+
+		<title>MlShopping</title>
+
+
+	</head>	
+	
+	
+<body>
+
+
+<div class="container" style = 'text-align:center;'>
+
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+	    <a class="navbar-brand" href="{% url 'home' %}">MlShopping</a>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="/">Home</a></li>
+	      {% if user.is_authenticated %}
+	      <li><a href="{% url 'paragony:lista_paragonow' %}">Receipt List</a></li>
+	      <!--      <li><a href="/about/">About</a></li> -->
+	      <!--          <li><a href="#">Contact</a></li> -->
+	      {% endif %}
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+	{% if user.is_authenticated %}
+	    	    <li class="dropdown">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{request.user.username}}<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/logout/">Log out</a></li>
+		  <li><a href="{% url 'paragony:lista_paragonow' %}">Receipts</a></li>
+
+                </ul>
+              </li>
+	{% else %}
+              <li class="active"><a href="/login/">Log in <span class="sr-only">(current)</span></a></li>
+              <li><a href="/register/">Register</a></li>
+	{% endif %}
+	    </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+</nav>
+
+      {% block content %}
+
+<div class="jumbotron">
+        <h1>Paragony</h1>
+        <p>Here you can add your receipts and analyse your past expenses. </p>
+
+	{% if user.is_authenticated %}
+
+        <p>
+        <a class="btn btn-lg btn-primary" href="{% url 'paragony:lista_paragonow' %}" role="button">lista paragonow</a>
+         <a class="btn btn-lg btn-primary" href="{% url 'paragony:add_receipt' %}" role="button">wprowadz paragon</a>
+        </p>
+	
+	{% else %}
+	<p>
+	<a class="btn btn-lg btn-primary" href="{% url 'loginapp:register' %}" role="button">Sign up</a>
+	</p>
+{% endif %}
+	
+      </div> <!-- jumbo -->
+
+
+	{% endblock %}
+</div> <!-- /container -->
+
+	<p  style = 'text-align:left;'>
+	asasdfasdf
+	</p>
+
+
+
+
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+
+ <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!--    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script> -->
+    <script>
+	
+
+	$(document).ready(function(){
+	{% block jquery %}
+		
+		<!--		alert('hello world'); -->
+
+
+
+		{% endblock %}	
+	
+   
+	});
+
+
+
+    </script> 
+   
+   
+   
+   
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+	<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+  </body>
+</html>

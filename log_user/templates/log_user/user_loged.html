@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+	  <div class="col-md-2"></div>
+	    <div class="col-md-8">
+	   
+		    <p>  Hello, {{ user }} bellow are your cards:</p></br>
+		
+
+		
+		   <table class='table table-bordered table-striped table-hover'>
+		      <thead>
+		      <tr>
+		      	<th class ='text-center'> Name </th>
+			<th class ='text-center'> Start </th>
+			<th class ='text-center'> Edit </th>
+			<th class ='text-center'> Delete </th>
+		      </tr>
+		      </thead>
+			
+		      <tbody>
+		   	 {% for obj in pytania %}
+		   		<tr>
+				<td class="text-center"> {{ obj.carddeck }}</td>
+				<td class="text-center" ><a href = '/cards/{{ user }}/{{ obj.carddeck }}/0/qq'> start learning </a></td>
+				<td class="text-center"><a href = '/cards/edit/{{ user }}/{{ obj.carddeck }}'>edit</a></td>
+				<td class="text-center"><a href = '/cards/delete/{{ user }}/{{ obj.carddeck }}'>delete</a> </td>
+				</tr>
+<!--	 <h4><a href = '/{{ obj.carddeck }}'> {{ obj.carddeck }}</a></h4>  -->
+			 {% endfor %}
+		      </tbody>
+		   </table>
+	<a href="/addquestion" class="btn btn-info" role="button">Add Card</a>		  
+
+
+
+	    </div>
+	      <div class="col-md-2"></div>
+</div>
+
+
+{% endblock %}
+

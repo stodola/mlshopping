@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!--    <div class="container"> -->
+
+
+
+	{% for i in qs %}
+	    <div class="row">
+		      <div class="col-md-4">
+
+	<a href={{ i.image.url }} >
+	      	<img src={{ i.image.url }} alt="Mountain View" style="width:304px;height:228px;">
+		</a>
+	<br>
+
+	<br>
+
+
+
+
+
+
+			</div>
+		        <div class="col-md-4">
+			
+			{% if i.paragonitems_set.all %}
+
+ {#			{% for itemka in i.paragonitems_set.all %}  #}
+		
+
+
+<table class='table table-bordered table-striped table-hover'>
+                      <thead>
+                      <tr>
+                        <th class ='text-center'> Produkt </th>
+                        <th class ='text-center'> Cena </th>
+                      </tr>
+                      </thead>
+
+                      <tbody>
+                         {% for itemka in i.paragonitems_set.all %}
+                                <tr>
+                                <td class="text-left"> {{ itemka.produkt }}</td>
+                                <td class="text-center" >{{ itemka.cena }}</td>
+                                </tr>
+                         {% endfor %}
+                      </tbody>
+                   </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#			{{ itemka.produkt }} #} 
+{#			{{ itemka.cena }}  #}
+{#			{% endfor %}  #}
+
+
+			{% else %}
+			{{ i.image_data }}
+
+			{% endif %}
+
+			</div>
+			  <div class="col-md-4">  
+				
+			  </div>
+	    </div>
+	    <hr>
+	{% endfor %}
+
+	<!--    </div>  --> <!-- /container --> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    {% endblock %}
+
+
+	    {% block jquery %}
+			  
+			   {% endblock %}
+
+			   {% block dupa %} {% endblock %}
+

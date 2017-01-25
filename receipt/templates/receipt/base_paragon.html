@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!--    <div class="container"> -->
+
+
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Paragony</h1>
+        <p>Here you can add your receipts and analyse your past expenses. </p>
+
+        <p>
+        <a class="btn btn-lg btn-primary" href="{% url 'paragony:lista_paragonow' %}" role="button">lista paragonow</a>
+         <a class="btn btn-lg btn-primary" href="{% url 'paragony:add_receipt' %}" role="button">wprowadz paragon</a>
+
+
+        </p>
+
+       
+
+
+
+      </div>
+
+
+
+
+
+
+
+
+      <!--    </div>   -->  <!-- /container --> 
+    {% endblock %}
+
+
+	    {% block jquery %}
+			  
+			   {% endblock %}
+
+			   {% block dupa %} {% endblock %}
+
