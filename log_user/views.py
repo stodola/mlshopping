@@ -31,7 +31,8 @@ def login1(request):
         user = authenticate (username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('paragony:lista_paragonow')
+           # return redirect('paragony:lista_paragonow')
+            return redirect('home')
         else:
             context['flag'] = True
     

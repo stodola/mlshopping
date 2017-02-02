@@ -8,23 +8,68 @@ def to_text(tekst):
     buf = io.StringIO(tekst)
     tekst=buf.readlines()
 
-    poczatek=0 
+    poczatek=[] 
     koniec=[]
+    last_chance = []
+
+
     for i, item in enumerate(tekst):
 
         row = item.replace('\n','').split(' ') 
         for j in row:
             lev=Levenshtein.distance(j, 'FISKALNY')
-            if lev  <= 2:
-                poczatek = i
+            poczatek.append((lev,j))            
+
 
             lev2=Levenshtein.distance(j, 'Sprzed.')
-            if lev2 <= 2:
-                koniec.append(i)
+            koniec.append((lev2,i,j))
+            lev3=Levenshtein.distance(j, 'SP.OP.')
+            koniec.append((lev3,i,j))
+            lev4=Levenshtein.distance(j, 'Sp.op.')
+            koniec.append((lev4,i,j))
+            lev5=Levenshtein.distance(j, 'Sprzedaż')
+            koniec.append((lev5,i,j))
+            lev6_pln=Levenshtein.distance(j, 'PLN')
+            last_chance.append((lev6_pln,j))
+            # lev7=Levenshtein.distance(j, 'SP.OP.')
+    
+
+    poczatek1 = min(poczatek)[1]
+
+    new_list=[]
+    for i, item in enumerate(tekst):
+        row = item.replace('\n','').split(' ')
+        for j in row:
+            if j == poczatek1:
+                new_list = tekst[i+1:]
+                break
+#    print(new_list)
+    new_list2=[]
+    
+    #ostatnia szansa jak trzeba uzyc PLN
+    if min(koniec)[0] >=4 and lev6_pln ==0:
+        koniec1 = 'PLN'
+        print('if 1')
+        for i,item in enumerate(new_list):
+            if koniec1 in item:
+                new_list2 = new_list[:i]
+                break
+#####################################################################################
+    elif min(koniec)[0]<4:
+        koniec1 = min(koniec)[2]
+        for i,item in enumerate(new_list):
+            if koniec1 in item:
+                new_list2 = new_list[:i]
+                break
+    else:
+        new_list2 = new_list[:]
+	   
 
 
-    #tekst po opcieciu poczatku i konca
-    tekst2 = tekst[poczatek+1:min(koniec)]
+    tekst2= new_list2[:]
+
+
+
 
     #removing first element from list if it is new line or it is equal to 1
     while tekst2[0] == '\n' or len(tekst2[0])==1:
@@ -36,7 +81,7 @@ def to_text(tekst):
     tekst3=[]
 
     i=0
-    while True:
+    while True:     #to sie przydaje jak ta sama linjka jest rozrzucona na dwa wiersze
         try :
             if tekst2[i+1] == '\n':
                 tekst3.append(tekst2[i]+' ' +tekst2[i+2])
@@ -45,9 +90,11 @@ def to_text(tekst):
                 tekst3.append(tekst2[i])
                 i+=1
         except IndexError:
-            tekst3.append(tekst2[i])
-            break
-
+            try:    
+                tekst3.append(tekst2[i])
+                break
+            except:
+                break
     #tu moze byc kiedys problem jak nie bedzie co zastapic
     tekst4=[]
     for i in tekst3:
@@ -71,7 +118,8 @@ def to_text(tekst):
 
 
     cena = []
-
+    
+    #to zadziala jak zalozymy ze nie ma juz wolnych linii
     for i, item in enumerate(tekst4):
         for j, item1  in enumerate(item.split(' ')[::-1]):
             if len(item1) == 1:
@@ -83,6 +131,7 @@ def to_text(tekst):
 
     #to ma na celu pozbycie sie liter z listy z cenami
     #to wynika z tego ze tesseract jest zle wytrenowany pozniej do usniecia
+    '''
     new_cena_1=[]
     def bez_liter(lista):
         for i, item in enumerate(lista):
@@ -142,7 +191,7 @@ def to_text(tekst):
         return new_cena_4
 
     new_cena_4 = to_floating_point(new_cena_3)
-
+    '''
 
     #teraz zajmiemy sie itemami z przodu
 
@@ -159,12 +208,12 @@ def to_text(tekst):
                 tekst5.append(item)
         return tekst5
 
-    tekst5 =infront_spaces(tekst4)
-
+    #tekst5 =infront_spaces(tekst4)
+    tekst5=tekst4[:]
     nazwa_produktu = []
     for i, item in enumerate(tekst5):
         nazwa=''
-        for j, item1 in enumerate(item.split(' ')[:4]):  #to wezmie tylko po uwage 4 pierwsze elemtny
+        for j, item1 in enumerate(item.split(' ')):  #to wezmie tylko po uwage 4 pierwsze elemtny
             if j==0:
                 nazwa=nazwa+item1+' '
             else:  # j >0:
@@ -177,9 +226,11 @@ def to_text(tekst):
 
         nazwa_produktu.append(nazwa)
 
-    return zip(nazwa_produktu,new_cena_3)
-
+    return zip(nazwa_produktu,cena)
+    
 if __name__ =='__main__':
-    tekst =pytesseract.image_to_string(Image.open('IMG_20170113_191448.jpg'), lang='pol')
-    to_text(tekst)
-
+    import sys
+    img = sys.argv[1]
+    tekst_from_img =pytesseract.image_to_string(Image.open(img), lang='pol')
+    rt=to_text(tekst_from_img)
+    print(list(rt))
