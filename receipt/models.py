@@ -12,7 +12,7 @@ def __str__(self):
 
 
 class ParagonItems(models.Model):
-    id_paragonu =models.ForeignKey(Paragon, blank=True, null=True)  #potem wyjeb te blank i null bo to tylko po to by dzialalo ze starymi danymi
+    id_paragonu =models.ForeignKey(Paragon, blank=True, null=True)  
     cena = models.CharField(max_length=120, null=True, blank=True)
     produkt = models.CharField(max_length=120, null=True, blank=True)
 
